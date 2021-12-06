@@ -11,6 +11,7 @@ protocol GenericItemProtocol: Any {
     var subName: String { get }
     var id: String { get }
     var childItems: [GenericItemProtocol] { get }
+    var layer: Int { get }
     //Compare Functions
     func compareSmaller(with: GenericItemProtocol) -> Bool
 }

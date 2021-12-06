@@ -38,6 +38,9 @@ class TreeTableViewController: UIViewController, TreeTableViewControllerProtocol
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TreeCell.self, forCellReuseIdentifier: "1")
+        if #available(iOS 15.0, *) {
+            tableView.sectionHeaderTopPadding = 0
+        }
         return tableView
     }()
     

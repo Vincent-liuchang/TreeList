@@ -4,7 +4,7 @@ class TreeCell: UITableViewCell {
     private struct Constants {
         static let horizontalPadding: CGFloat = 16
         static let verticalPadding: CGFloat = 14
-        static let avatarHeight: CGFloat = 40
+        static let avatarHeight: CGFloat = 20
         static let indicatorSize: CGFloat = 16
         static let buttonSize: CGFloat = 40
         static let subscriptSize: CGFloat = 8
@@ -26,6 +26,15 @@ class TreeCell: UITableViewCell {
     
     private lazy var contentLeadingConstraint = contentStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0)
     
+    private lazy var avatar: UIImageView = {
+       let avatar = UIImageView(image: UIImage(named: "defaultAvatar"))
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        avatar.layer.cornerRadius = Constants.avatarHeight / 2
+        avatar.layer.masksToBounds = true
+        avatar.sizeToFit()
+        return avatar
+    }()
+    
     private lazy var noItemsLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -35,16 +44,8 @@ class TreeCell: UITableViewCell {
         return label
     }()
     
-    private let subScriptIcon: UIImageView = {
-        let icon = UIImageView(frame: .zero)
-        icon.translatesAutoresizingMaskIntoConstraints = false
-        icon.accessibilityIdentifier = "subScriptIcon"
-        icon.isHidden = true
-        return icon
-    }()
-    
     private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [labelStack])
+        let stack = UIStackView(arrangedSubviews: [avatar, labelStack])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .horizontal
         stack.distribution = .fill
@@ -113,7 +114,6 @@ class TreeCell: UITableViewCell {
         selectionStyle = .default
         contentView.addSubview(noItemsLabel)
         contentView.addSubview(contentStack)
-        contentView.addSubview(subScriptIcon)
         addConstraints()
     }
     
@@ -137,7 +137,9 @@ class TreeCell: UITableViewCell {
             contentStack.topAnchor.constraint(equalTo: contentView.topAnchor),
             contentStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             contentStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            contentLeadingConstraint
+            contentLeadingConstraint,
+            avatar.widthAnchor.constraint(equalToConstant: Constants.avatarHeight),
+            avatar.heightAnchor.constraint(equalToConstant: Constants.avatarHeight)
         ]
         NSLayoutConstraint.activate(customConstraints)
     }
@@ -147,7 +149,6 @@ class TreeCell: UITableViewCell {
         
         guard !model.originalItem.id.isEmpty else {
             contentStack.isHidden = true
-            subScriptIcon.isHidden = true
             noItemsLabel.isHidden = false
             return
         }
@@ -160,6 +161,6 @@ class TreeCell: UITableViewCell {
 //            nameLabel.setBoldForRangeInText(startPosition: position.0, endPosition: position.1, labelText: model.participant.displayName)
 //        }
         
-        contentLeadingConstraint.constant = (model.isChild) ? Constants.avatarHeight : 0
+        contentLeadingConstraint.constant = (model.isChild) ? Constants.avatarHeight * CGFloat(model.originalItem.layer) : 0
     }
 }

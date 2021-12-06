@@ -40,17 +40,9 @@ class TreeListViewController: UIViewController, TreeListViewControllerProtocol {
         return controller
     }()
     
-    private lazy var addGuestButton: UIButton = {
-        let button = UIButton(frame: .zero)
-        button.accessibilityIdentifier = "addGuestButton"
-        button.accessibilityLabel = NSLocalizedString("addGuest", comment: "")
-        button.addTarget(self, action: #selector(onAddGuest(_:)), for: .touchUpInside)
-        return button
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        treeTableViewController.reload(groups: [ParticipantListGroup(displayName: "TestGroup", items:  [ParticipantListItem(displayName: "Test1", id: "1", childParticipants: [ParticipantListItem(displayName: "Test1.1", id: "1.1"),ParticipantListItem(displayName: "Test1.2", id: "1.2"),ParticipantListItem(displayName: "Test1.3", id: "1.3")]), ParticipantListItem(displayName: "Test2", id: "2"), ParticipantListItem(displayName: "Test3", id: "3")])])
+        treeTableViewController.reload(groups: [ParticipantListGroup(displayName: "TestGroup", items:  [ParticipantListItem(displayName: "Peter", id: "1", childParticipants: [ParticipantListItem(displayName: "Bob", id: "1.1", layer: 1),ParticipantListItem(displayName: "Alice", id: "1.2", layer: 1),ParticipantListItem(displayName: "Charlie", id: "1.3", childParticipants: [ParticipantListItem(displayName: "David", id: "1.3.1", layer: 2)], layer: 1)]), ParticipantListItem(displayName: "Fluk", id: "2"), ParticipantListItem(displayName: "Emily", id: "3")])])
         
         addChildViewController(treeTableViewController)
         addConstraints()
@@ -61,17 +53,11 @@ class TreeListViewController: UIViewController, TreeListViewControllerProtocol {
         navigationItem.title = "Tree List Demo"
         navigationItem.searchController = searchViewConntroller
         navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: sortButton)
         super.viewWillAppear(animated)
     }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-    }
-    
+
     @objc func onSort(_ sender: UIButton) {}
-    
-    @objc func onAddGuest(_ sender: UIButton) {}
-    
 //    @available(iOS 14.0, *)
 //    private func createMenu(items: [PopoverTableViewItemProtocol], title: String) -> UIMenu {
 //        let actions = createMenuActions(items: items)
@@ -141,16 +127,19 @@ class ParticipantListItem: GenericItemProtocol, Comparable {
     var displayName: String
     var subName: String = ""
     var childItems: [GenericItemProtocol] = []
+    var layer: Int
     
-    init (displayName: String, id: String) {
+    init (displayName: String, id: String, layer: Int = 0) {
         self.displayName = displayName
         self.id = id
+        self.layer = layer
     }
     
-    init (displayName: String, id: String, childParticipants: [GenericItemProtocol]) {
+    init (displayName: String, id: String, childParticipants: [GenericItemProtocol], layer: Int = 0) {
         self.displayName = displayName
         self.id = id
         self.childItems = childParticipants
+        self.layer = layer
     }
     
     func compareSmaller(with: GenericItemProtocol) -> Bool {

@@ -25,6 +25,7 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         label.setContentHuggingPriority(.defaultLow, for: .horizontal)
         label.isUserInteractionEnabled = true
+        label.font = .boldSystemFont(ofSize: 18)
         return label
     }()
     
@@ -43,14 +44,14 @@ class SectionHeaderView: UITableViewHeaderFooterView {
         customConstraints.append(titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor))
         customConstraints.append(titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5))
         customConstraints.append(titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5))
-        customConstraints.append(titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5))
+        customConstraints.append(titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor))
         NSLayoutConstraint.activate(customConstraints)
     }
     
     func configure(model: TreeTableSection, sectionIndex: Int) {
         self.model = model
         self.index = sectionIndex
-        titleLabel.text = model.title
+        titleLabel.text = model.title.uppercased()
     }
     
     @objc private func onHeaderPressed(_ sender: UITapGestureRecognizer) {
