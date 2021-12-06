@@ -157,10 +157,13 @@ class TreeCell: UITableViewCell {
         
         //labels
         nameLabel.text = model.originalItem.displayName
-//        for position in model.participant.hitPostions {
-//            nameLabel.setBoldForRangeInText(startPosition: position.0, endPosition: position.1, labelText: model.participant.displayName)
-//        }
         
         contentLeadingConstraint.constant = (model.isChild) ? Constants.avatarHeight * CGFloat(model.originalItem.layer) : 0
+        
+        applyTheme()
+    }
+    
+    private func applyTheme() {
+        backgroundColor = .tertiarySystemBackground
     }
 }

@@ -192,6 +192,10 @@ extension TreeTableViewController: TreeListDataSourceDelegate {
         tableView.reloadRows(at: from, with: .none)
         tableView.reloadRows(at: to, with: .none)
     }
+    
+    func treeDataSource(_ dataSource: TreeListDataSourceProtocol, didUpdateHeader sections: IndexSet) {
+        tableView.reloadSections(sections, with: .automatic)
+    }
 }
 
 extension TreeTableViewController: SectionHeaderViewDelegate {

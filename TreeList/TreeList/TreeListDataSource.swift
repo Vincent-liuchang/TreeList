@@ -11,6 +11,7 @@ protocol TreeListDataSourceDelegate: AnyObject {
     func treeDataSource(_ dataSource: TreeListDataSourceProtocol, didChangeSections sections: IndexSet)
     func treeDataSource(_ dataSource: TreeListDataSourceProtocol, didRemove removed: [IndexPath], didAdd added: [IndexPath], didChange changed: [IndexPath])
     func treeDataSource(_ dataSource: TreeListDataSourceProtocol, from: [IndexPath], to: [IndexPath])
+    func treeDataSource(_ dataSource: TreeListDataSourceProtocol, didUpdateHeader sections: IndexSet)
 }
 
 class TreeListDataSource: TreeListDataSourceProtocol {
@@ -41,13 +42,11 @@ class TreeListDataSource: TreeListDataSourceProtocol {
         return serialized
     }
     
-//    func updateHeader(displayName: String, controlButton: CHButton, indicators: [LegacyCollabIconType], groupMatcher: GroupMatcher) {
-//        guard case let (sectionIndex?, section?) = findSection(groupMatcher: groupMatcher) else { return }
-//        section.title = displayName
-//        section.button = controlButton
-//        section.indicators = indicators
-//        delegate?.itemDataSource(self, didChangeSections: [sectionIndex])
-//    }
+    func updateHeader(displayName: String, groupMatcher: GroupMatcher) {
+        guard case let (sectionIndex?, section?) = findSection(groupMatcher: groupMatcher) else { return }
+        section.title = displayName
+        delegate?.treeDataSource(self, didUpdateHeader: [sectionIndex])
+    }
     
     func insert(items: [GenericItemProtocol], parent: String, groupMatcher: GroupMatcher) {
         let updateItems = handleChange(items, parent, groupMatcher, insert: true) { item, parentId, section, sectionIndex  in
